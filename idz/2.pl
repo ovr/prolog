@@ -1,7 +1,5 @@
-fronttoken(S,T,STail):-atom_chars(S,SList),
-    append(TList,[' '|STailList],SList),
-    atom_chars(T,TList),atom_chars(STail,STailList).
+make_duplicates([], []).
+make_duplicates([X|Xs], [X,X|Xs1]) :-
+    make_duplicates(Xs, Xs1).
 
-wordsFr(C,S,[A|B]):- fronttoken(S,A,R), frontchar(A,C,_), !, wordsFr(C,R,B).
-wordsFr(C,S,A):- fronttoken(S,_,R), !, wordsFr(C,R,A).
-wordsFr(_,_,[]).
+% make_duplicates([1, 2, 3], X).
