@@ -6,5 +6,6 @@ segm(X,Y):- abs(Y) =< abs(X).
 ifIn(X,Y):- sqrt(X*X+Y*Y) =< 1, segm(X,Y).
 
 % interactive
-[ifIn].
-ifIn(0.5,0.3), write('...'), nl.
+main :-
+  writeln("Hello, World!"),
+  ifIn(0.5,0.3), halt.
