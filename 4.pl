@@ -15,11 +15,68 @@ point(10,11).
 %point(7,11).
 
 
-t2(X,Y):- point(X,Y).
-t2(X,Y):- point(Y,X).
+connected(X,Y):- point(X,Y).
+connected(X,Y):- point(Y,X).
 
-t3(V):- point(V,_).
-t3(V):- point(_,V).
+vertex(V):- point(V,_).
+vertex(V):- point(_,V).
+
+node(N):- connected(A,N), connected(N,C), A\==C.
+triade(N):- connected(A,N), connected(B,N), connected(C,N), A\==B, A\==C, B\==C.
+finish(F):- vertex(F), not(node(F)).
 
 
-triade(N):- t2(A,N), t2(B,N), t2(C,N), A\==B, A\==C, B\==C.
+path(A,B,Path) :-
+       travel(A,B,[A],Q),
+       reverse(Q,Path).
+
+%3
+travel(A,B,P,[B|P]) :-
+       connected(A,B).
+travel(A,B,Visited,Path) :-
+       connected(A,C),
+       C \== B,
+       \+memberchk(C,Visited),
+       travel(C,B,[C|Visited],Path).
+
+%4
+istriangle(A,B,C):-
+		connected(A,B), connected(B,C), connected(C,A),
+		C\==A, C\==B, B\==A.
+
+%45
+isquad(A,B,C,D):-
+		connected(A,B), connected(B,C), connected(C,D), connected(D,A),
+		C\==A, B\==A, D\==A, C\==B, D\==B, C\==D.
+
+
+getLenList([],0).
+getLenList([_|L],N):-
+	getLenList(L,N1),
+	N is N1+1.
+
+
+pathLen(A,B,N):-
+	path(A,B,Path),
+	getLenList(Path, N).
+
+opposite(A,B):-
+		path(A,B,Path1),
+		path(A,B,Path2),
+		getLenList(Path1, N1),
+		getLenList(Path2, N2),
+		N1 == N2,
+		Path1 \== Path2.
+
+islocked(V):-
+		node(V),
+		pathLen(V,V,N),
+		N > 3.
+
+iscleartriangle(A,B,C):-
+		istriangle(A,B,C),
+		not(triade(A)), not(triade(B)), not(triade(C)).
+
+isclearquad(A,B,C,D):-
+		isquad(A,B,C,D),
+		not(triade(A)), not(triade(B)), not(triade(C)), not(triade(D)).
