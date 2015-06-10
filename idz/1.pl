@@ -4,8 +4,3 @@ segm(X,Y):- X*Y>0,!,abs(Y)>=abs(X).
 segm(X,Y):- abs(Y) =< abs(X).
 
 ifIn(X,Y):- sqrt(X*X+Y*Y) =< 1, segm(X,Y).
-
-% interactive
-main :-
-  writeln("Hello, World!"),
-  ifIn(0.5,0.3), halt.
